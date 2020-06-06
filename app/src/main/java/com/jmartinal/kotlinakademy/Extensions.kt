@@ -1,6 +1,8 @@
 package com.jmartinal.kotlinakademy
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,3 +27,10 @@ fun ViewGroup.inflate(@LayoutRes layoutId: Int): View = LayoutInflater
 fun ImageView.loadUrl(url: String) {
     Glide.with(this).load(url).into(this)
 }
+
+inline fun <reified T : Activity> Context.startActivity() {
+    val intent = Intent(this, T::class.java)
+    startActivity(intent)
+}
+
+
