@@ -10,6 +10,7 @@ import com.jmartinal.kotlinakademy.R
 import com.jmartinal.kotlinakademy.inflate
 import com.jmartinal.kotlinakademy.loadUrl
 import com.jmartinal.kotlinakademy.toast
+import kotlinx.android.synthetic.main.view_media_item.view.*
 
 class MediaAdapter(private val items: List<MediaItem>) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
@@ -27,14 +28,10 @@ class MediaAdapter(private val items: List<MediaItem>) :
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        private val mediaVideoIndicator: ImageView = itemView.findViewById(R.id.mediaVideoIndicator)
-        private val mediaThumb: ImageView = itemView.findViewById(R.id.mediaThumb)
-        private val mediaTitle: TextView = itemView.findViewById(R.id.mediaTitle)
-
         fun bind(item: MediaItem) {
-            mediaThumb.loadUrl(item.url)
-            mediaTitle.text = item.title
-            mediaVideoIndicator.visibility = when(item.type) {
+            itemView.mediaThumb.loadUrl(item.url)
+            itemView.mediaTitle.text = item.title
+            itemView.mediaVideoIndicator.visibility = when(item.type) {
                 Type.VIDEO -> View.VISIBLE
                 Type.PHOTO -> View.GONE
             }
