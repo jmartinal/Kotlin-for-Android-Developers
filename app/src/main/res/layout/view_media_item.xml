@@ -1,30 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="2dp">
 
-    <ImageView
-        android:id="@+id/mediaThumb"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="ContentDescription"
-        tools:srcCompat="@mipmap/ic_launcher" />
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/mediaThumb"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:scaleType="centerCrop"
+            tools:src="@mipmap/ic_launcher"
+            tools:ignore="ContentDescription" />
+
+        <ImageView
+            android:id="@+id/mediaVideoIndicator"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_play_circle_outline"
+            android:visibility="gone"
+            tools:visibility="visible"
+            tools:ignore="ContentDescription" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/mediaTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#333"
+        android:gravity="center"
         android:padding="16dp"
-        android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Medium.Inverse"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mediaThumb"
-        tools:text="MediaTitle" />
+        tools:text="Title" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>
