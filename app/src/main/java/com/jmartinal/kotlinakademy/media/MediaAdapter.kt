@@ -7,9 +7,8 @@ import com.jmartinal.kotlinakademy.R
 import com.jmartinal.kotlinakademy.databinding.ViewMediaItemBinding
 import com.jmartinal.kotlinakademy.inflate
 import com.jmartinal.kotlinakademy.loadUrl
-import com.jmartinal.kotlinakademy.toast
 
-class MediaAdapter(private val items: List<MediaItem>) :
+class MediaAdapter(private val items: List<MediaItem>, private val onClick: (MediaItem) -> Unit) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -18,7 +17,9 @@ class MediaAdapter(private val items: List<MediaItem>) :
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(items[position])
+        val item = items[position]
+        holder.bind(item)
+        holder.itemView.setOnClickListener { onClick(item) }
     }
 
     override fun getItemCount() = items.size
@@ -34,7 +35,6 @@ class MediaAdapter(private val items: List<MediaItem>) :
                     Type.VIDEO -> View.VISIBLE
                     Type.PHOTO -> View.GONE
                 }
-                root.setOnClickListener { toast(item.title) }
             }
         }
     }

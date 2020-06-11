@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.jmartinal.kotlinakademy.databinding.ActivityMainBinding
 import com.jmartinal.kotlinakademy.media.MediaAdapter
 import com.jmartinal.kotlinakademy.media.getItems
+import kotlinx.android.synthetic.main.view_media_item.view.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,7 +13,7 @@ class MainActivity : AppCompatActivity() {
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.recycler.adapter = MediaAdapter(getItems())
+        binding.recycler.adapter = MediaAdapter(getItems()) { toast(it.title) }
     }
 
 }
