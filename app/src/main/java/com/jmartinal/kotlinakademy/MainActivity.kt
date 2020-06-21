@@ -16,9 +16,4 @@ class MainActivity : AppCompatActivity() {
         recycler.adapter = MediaAdapter(getItems())
     }
 
-    // Exercise 1: Create a fun to toast a message
-    private fun toast(message: String) {
-        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-    }
-
 }
