@@ -2,11 +2,9 @@ package com.jmartinal.kotlinakademy.media
 
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.jmartinal.kotlinakademy.R
+import com.jmartinal.kotlinakademy.databinding.ViewMediaItemBinding
 import com.jmartinal.kotlinakademy.inflate
 import com.jmartinal.kotlinakademy.loadUrl
 import com.jmartinal.kotlinakademy.toast
@@ -26,14 +24,18 @@ class MediaAdapter(private val items: List<MediaItem>) :
     override fun getItemCount() = items.size
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-
-        private val mediaThumb: ImageView = itemView.findViewById(R.id.mediaThumb)
-        private val mediaTitle: TextView = itemView.findViewById(R.id.mediaTitle)
+        private val binding = ViewMediaItemBinding.bind(itemView)
 
         fun bind(item: MediaItem) {
-            mediaThumb.loadUrl(item.url)
-            mediaTitle.text = item.title
-            itemView.setOnClickListener { toast(item.title) }
+            with(binding) {
+                mediaThumb.loadUrl(item.url)
+                mediaTitle.text = item.title
+                mediaVideoIndicator.visibility = when (item.type) {
+                    Type.VIDEO -> View.VISIBLE
+                    Type.PHOTO -> View.GONE
+                }
+                root.setOnClickListener { toast(item.title) }
+            }
         }
     }
 }
