@@ -27,10 +27,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId) {
-            R.id.filter_all -> mediaAdapter.mediaItems = getItems()
-            R.id.filter_photos -> mediaAdapter.mediaItems = getItems().filter { it.type == Type.PHOTO }
-            R.id.filter_videos -> mediaAdapter.mediaItems = getItems().filter { it.type == Type.VIDEO }
+        getItems().let { items ->
+            mediaAdapter.mediaItems = when (item.itemId) {
+                R.id.filter_all -> items
+                R.id.filter_photos -> items.filter { it.type == Type.PHOTO }
+                R.id.filter_videos -> items.filter { it.type == Type.VIDEO }
+                else -> emptyList()
+            }
         }
         return true
     }
