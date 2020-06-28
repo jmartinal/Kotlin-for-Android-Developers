@@ -6,12 +6,18 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.jmartinal.kotlinakademy.databinding.ActivityMainBinding
 import com.jmartinal.kotlinakademy.media.MediaAdapter
+import com.jmartinal.kotlinakademy.media.MediaProvider
 import com.jmartinal.kotlinakademy.media.Type
-import com.jmartinal.kotlinakademy.media.getItems
 
 class MainActivity : AppCompatActivity() {
 
-    private val mediaAdapter: MediaAdapter by lazy { MediaAdapter(getItems()) { toast(it.title) } }
+    private val mediaAdapter: MediaAdapter by lazy {
+        MediaAdapter(MediaProvider.getItems()) {
+            toast(
+                it.title
+            )
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +33,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        getItems().let { items ->
+        MediaProvider.getItems().let { items ->
             mediaAdapter.mediaItems = when (item.itemId) {
                 R.id.filter_all -> items
                 R.id.filter_photos -> items.filter { it.type == Type.PHOTO }
