@@ -5,15 +5,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.jmartinal.kotlinakademy.databinding.ActivityMainBinding
 import com.jmartinal.kotlinakademy.media.MediaAdapter
 import com.jmartinal.kotlinakademy.media.MediaItem
 import com.jmartinal.kotlinakademy.media.MediaProvider
 import com.jmartinal.kotlinakademy.media.Type
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateItems(filter: Int = R.id.filter_all) {
-        GlobalScope.launch(Dispatchers.Main) {
+        lifecycleScope.launch {
             binding.recycler.visibility = View.GONE
             binding.progress.visibility = View.VISIBLE
             mediaAdapter.mediaItems = withContext(Dispatchers.IO) { getFilteredItems(filter) }
