@@ -16,7 +16,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
-    private val mediaAdapter = MediaAdapter { toast(it.title) }
+    private val mediaAdapter = MediaAdapter { startActivity<DetailActivity>(DetailActivity.EXTRA_ITEM_ID to it.id) }
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
