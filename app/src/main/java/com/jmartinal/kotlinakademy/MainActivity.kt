@@ -3,28 +3,31 @@ package com.jmartinal.kotlinakademy
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.jmartinal.kotlinakademy.databinding.ActivityMainBinding
 import com.jmartinal.kotlinakademy.media.MediaAdapter
+import com.jmartinal.kotlinakademy.media.MediaItem
 import com.jmartinal.kotlinakademy.media.MediaProvider
 import com.jmartinal.kotlinakademy.media.Type
+import kotlinx.coroutines.*
+import kotlin.coroutines.CoroutineContext
 
 class MainActivity : AppCompatActivity() {
 
-    private val mediaAdapter: MediaAdapter by lazy {
-        MediaAdapter(MediaProvider.getItems()) {
-            toast(
-                it.title
-            )
-        }
-    }
+    private val mediaAdapter = MediaAdapter { toast(it.title) }
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
+
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         binding.recycler.adapter = mediaAdapter
+
+        updateItems()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -33,14 +36,28 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        MediaProvider.getItems().let { items ->
-            mediaAdapter.mediaItems = when (item.itemId) {
-                R.id.filter_all -> items
-                R.id.filter_photos -> items.filter { it.type == Type.PHOTO }
-                R.id.filter_videos -> items.filter { it.type == Type.VIDEO }
+        updateItems(item.itemId)
+        return true
+    }
+
+    private fun updateItems(filter: Int = R.id.filter_all) {
+        lifecycleScope.launch {
+            binding.recycler.visibility = View.GONE
+            binding.progress.visibility = View.VISIBLE
+            mediaAdapter.mediaItems = withContext(Dispatchers.IO) { getFilteredItems(filter) }
+            binding.progress.visibility = View.GONE
+            binding.recycler.visibility = View.VISIBLE
+        }
+    }
+
+    private fun getFilteredItems(filter: Int): List<MediaItem> {
+        return MediaProvider.getItems().let { media ->
+            when(filter) {
+                R.id.filter_all -> media
+                R.id.filter_videos -> media.filter { it.type == Type.VIDEO }
+                R.id.filter_photos -> media.filter { it.type == Type.PHOTO }
                 else -> emptyList()
             }
         }
-        return true
     }
 }
