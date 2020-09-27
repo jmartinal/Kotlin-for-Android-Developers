@@ -7,10 +7,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.jmartinal.kotlinakademy.databinding.ActivityMainBinding
-import com.jmartinal.kotlinakademy.media.MediaAdapter
-import com.jmartinal.kotlinakademy.media.MediaItem
-import com.jmartinal.kotlinakademy.media.MediaProvider
-import com.jmartinal.kotlinakademy.media.Type
+import com.jmartinal.kotlinakademy.media.*
 import kotlinx.coroutines.*
 import kotlin.coroutines.CoroutineContext
 
@@ -36,11 +33,17 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        updateItems(item.itemId)
+        val filter = when(item.itemId) {
+            R.id.filter_photos -> Filter.ByType(Type.PHOTO)
+            R.id.filter_videos -> Filter.ByType(Type.VIDEO)
+            R.id.filter_all -> Filter.None
+            else -> Filter.None
+        }
+        updateItems(filter)
         return true
     }
 
-    private fun updateItems(filter: Int = R.id.filter_all) {
+    private fun updateItems(filter: Filter = Filter.None) {
         lifecycleScope.launch {
             binding.recycler.visibility = View.GONE
             binding.progress.visibility = View.VISIBLE
@@ -50,13 +53,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun getFilteredItems(filter: Int): List<MediaItem> {
+    private fun getFilteredItems(filter: Filter): List<MediaItem> {
         return MediaProvider.getItems().let { media ->
             when(filter) {
-                R.id.filter_all -> media
-                R.id.filter_videos -> media.filter { it.type == Type.VIDEO }
-                R.id.filter_photos -> media.filter { it.type == Type.PHOTO }
-                else -> emptyList()
+                Filter.None -> media
+                is Filter.ByType -> media.filter { it.type == filter.type }
             }
         }
     }
