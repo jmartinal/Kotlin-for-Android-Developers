@@ -9,7 +9,9 @@ import com.jmartinal.kotlinakademy.inflate
 import com.jmartinal.kotlinakademy.loadUrl
 import kotlin.properties.Delegates
 
-class MediaAdapter(items: List<MediaItem> = emptyList(), private val onClick: (MediaItem) -> Unit) :
+    typealias Listener = (MediaItem) -> Unit
+
+class MediaAdapter(items: List<MediaItem> = emptyList(), private val onClick: Listener) :
     RecyclerView.Adapter<MediaAdapter.ViewHolder>() {
 
     var mediaItems: List<MediaItem> by Delegates.observable(items) { _, new, old ->
